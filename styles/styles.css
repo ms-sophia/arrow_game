@@ -1,0 +1,40 @@
+body
+{
+    background-color: #C21717;
+}
+.page
+{
+    width: 60%;
+    height: 100%;
+    max-width: 960%;
+    background-color: #e76219;
+    margin: 50px auto;
+    text-align: center;
+    border-radius: 5px;
+    
+}
+
+h1,h3
+{
+    margin: 20px auto;
+    color:#fddca9;  
+}
+h1{
+    font:90px Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+}
+
+h3{
+    font:50px Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+}
+
+.keyArrows
+{
+    display:grid;
+    grid-template-columns:1fr 1fr 1fr 1fr;
+    /* align-items: center; */
+    /* background-color: #FDDCA9; */
+    padding:10px 30px;
+    margin: 10% 10% 10% 10%;
+    font-size:90px;
+
+}
