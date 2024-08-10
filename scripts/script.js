@@ -79,7 +79,7 @@ function displayArrow()
 async function waitForKeyPress() {
     return new Promise((resolve) => {
         document.addEventListener('keydown', function onKeyPress(event) {
-            console.log(event.key);
+            // console.log(event.key);
             arrrowUser.push(event.key)
             document.removeEventListener('keydown', onKeyPress);
             resolve(); 
@@ -98,14 +98,16 @@ async function main() {
     displayArrow();
     
     cnt = 0;
-
-
+    
+    
     console.log('Waiting for user to input.....');
     
     while (true) {
         await waitForKeyPress();
         // console.log('It is pressed');
-        if (keys[cnt] === arrrowUser)
+        // todo: define how to end of the game
+        // todo: end by timer or by user
+        if (keys[cnt] === arrrowUser[cnt])
             {
             console.log('Korek')
             console.log(keys[cnt]);
@@ -114,8 +116,14 @@ async function main() {
         else
         {
             console.log('Rong');
+            // todo: improve code
+            arrowComp = [];
+            // * create the arrows for user to follow, has also randomizer inside
+            arrowComp = createArrow();
             
-            
+            // * display arrow 
+            displayArrow();
+            cnt = 0;
         }
         cnt++;
         console.log("COUNTING: " + cnt);
