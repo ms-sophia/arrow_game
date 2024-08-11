@@ -4,7 +4,7 @@ body
 }
 .page
 {
-    width: 60%;
+    width: 80%;
     height: 100%;
     max-width: 960%;
     background-color: #e76219;
@@ -14,17 +14,23 @@ body
     
 }
 
-h1,h3
+/* todo: make animations and arrows have litte bounce */
+h1,h2,h3
 {
-    margin: 20px auto;
+    padding: 20px;
+    margin: auto;
     color:#fddca9;  
+    font-family: "Press Start 2P", system-ui;
 }
 h1{
-    font:90px Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+    font:30px;
+}
+h2{
+    font:25px;
 }
 
 h3{
-    font:50px Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+    font:20px;
 }
 
 .keyArrows
