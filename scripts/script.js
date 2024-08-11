@@ -70,39 +70,34 @@ function displayArrow()
     icon_4.classList.add('fa-arrow-'+arrowComp[3]);
 }
 
-// function getUserInput(event) {
-//     return arrrowUser.push(event.key)
-// }    
-
-// document.addEventListener('keydown', getUserInput)
-
 async function waitForKeyPress() {
     return new Promise((resolve) => {
         document.addEventListener('keydown', function onKeyPress(event) {
-            // console.log(event.key);
             arrrowUser.push(event.key)
             document.removeEventListener('keydown', onKeyPress);
             resolve(); 
-            
-            
         });
     });
 }
-console.log("Welcome to the game");
 
 async function main() {
-    // * create the arrows for user to follow, has also randomizer inside
-    arrowComp = createArrow();
-    
-    // * display arrow 
-    displayArrow();
-    
-    cnt = 0;
-    
-    
-    console.log('Waiting for user to input.....');
+    var messageBoard = document.getElementById('messageBoard');
+    var timer = document.getElementById('timer');
+    var counter = document.getElementById('counter');
     
     while (true) {
+        // * Display Message 
+        messageBoard.textContent = 'Press arrow to start game'
+        
+        // * create the arrows for user to follow, has also randomizer inside
+        arrowComp = createArrow();
+        
+        // * display arrow 
+        displayArrow();
+        
+        cnt = 0;
+        
+        
         await waitForKeyPress();
         // console.log('It is pressed');
         // todo: define how to end of the game
