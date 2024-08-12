@@ -2,6 +2,11 @@ let arrowComp = [];
 let arrrowUser = [];
 let keys= [];
 let cnt = 0;
+let minutes = 1;
+let seconds = 0;
+let countPoint = 0;
+
+
 
 function randomizer() {
     var randNum;
@@ -70,7 +75,66 @@ function displayArrow()
     icon_4.classList.add('fa-arrow-'+arrowComp[3]);
 }
 
-async function waitForKeyPress() {
+function startTimer()
+{
+    timer = setInterval(updateTimer, 1000);
+}
+
+function formatTime(minutes, seconds)
+{
+    return (`${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`); 
+    
+}
+
+function updateTimer()
+{
+    var displayTimer = document.getElementById('timer');
+    displayTimer.textContent = formatTime(minutes, seconds);
+    
+    if (minutes === 0 && seconds === 0)
+        {
+        clearInterval(timer)
+    }
+    else
+    {
+        if (seconds > 0) {
+            seconds--;
+        }
+        else
+        {
+            seconds = 59;
+            minutes--;
+        }
+        
+    }
+}
+
+function restartTimer()
+{
+    clearInterval(timer);
+    
+    var displayTimer = document.getElementById('timer');
+    minutes = 1;
+    seconds = 0;
+    displayTimer.textContent = formatTime(minutes, seconds);
+    
+}
+
+function intialize()
+{
+    cnt = 0;
+    arrowComp = [];
+    arrrowUser = [];
+    keys = [];
+    
+    // * create the arrows for user to follow, has also randomizer inside
+    arrowComp = createArrow();
+    // * display arrow 
+    displayArrow();
+}
+
+
+async function userInput() {
     return new Promise((resolve) => {
         document.addEventListener('keydown', function onKeyPress(event) {
             arrrowUser.push(event.key)
@@ -80,51 +144,58 @@ async function waitForKeyPress() {
     });
 }
 
+
 async function main() {
     var messageBoard = document.getElementById('messageBoard');
-    var timer = document.getElementById('timer');
-    var counter = document.getElementById('counter');
+    var displayPoints = document.getElementById('counter');
     
+    // * create the arrows for user to follow, has also randomizer inside
+    arrowComp = createArrow();
+    
+    // * display arrow 
+    displayArrow();
+    
+    messageBoard.textContent = 'Press arrow to start game'
+    
+    // startTimer()
     while (true) {
         // * Display Message 
-        messageBoard.textContent = 'Press arrow to start game'
         
-        // * create the arrows for user to follow, has also randomizer inside
-        arrowComp = createArrow();
+        // todo: add start and stop for timer
         
-        // * display arrow 
-        displayArrow();
+        await userInput();
         
-        cnt = 0;
+        // todo: define how to end of the game or end by timer or by user
         
         
-        await waitForKeyPress();
-        // console.log('It is pressed');
-        // todo: define how to end of the game
-        // todo: end by timer or by user
         if (keys[cnt] === arrrowUser[cnt])
             {
-            console.log('Korek')
-            console.log(keys[cnt]);
-            console.log(arrrowUser[cnt]);
+            messageBoard.textContent = 'Correct Arrow';
+            countPoint++;
+            cnt++;
         }
         else
         {
-            console.log('Rong');
-            // todo: improve code
-            arrowComp = [];
-            // * create the arrows for user to follow, has also randomizer inside
-            arrowComp = createArrow();
+            messageBoard.textContent = 'Wrong Arrow';
             
-            // * display arrow 
-            displayArrow();
-            cnt = 0;
+            // * initialize arrays,points and count
+            countPoint = 0;    
+            intialize(); 
+            
+            
         }
-        cnt++;
-        console.log("COUNTING: " + cnt);
-        if (cnt === 4){
-            break;
+        
+        if (cnt === 4) {
+            messageBoard.textContent = 'New Arrow';
+            intialize();
         }
+        
+        
+        displayPoints.textContent = countPoint + " points";
+        
+        
+        
+        
         
     }
     
