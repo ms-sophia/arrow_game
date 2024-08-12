@@ -1,5 +1,5 @@
 let arrowComp = []; 
-let arrrowUser = [];
+let arrowUser = [];
 let keys= [];
 let cnt = 0;
 let minutes = 1;
@@ -61,10 +61,10 @@ function createArrow()
 
 function displayArrow()
 {
-    var icon_1 = document.getElementById('arrow_1');
-    var icon_2 = document.getElementById('arrow_2');
-    var icon_3 = document.getElementById('arrow_3');
-    var icon_4 = document.getElementById('arrow_4');
+    var icon_1 = document.getElementById('arrow_0');
+    var icon_2 = document.getElementById('arrow_1');
+    var icon_3 = document.getElementById('arrow_2');
+    var icon_4 = document.getElementById('arrow_3');
     icon_1.classList.remove('fa-arrow-right', 'fa-arrow-left', 'fa-arrow-up', 'fa-arrow-down');
     icon_2.classList.remove('fa-arrow-right', 'fa-arrow-left', 'fa-arrow-up', 'fa-arrow-down');
     icon_3.classList.remove('fa-arrow-right', 'fa-arrow-left', 'fa-arrow-up', 'fa-arrow-down');
@@ -117,16 +117,21 @@ function restartTimer()
     minutes = 1;
     seconds = 0;
     displayTimer.textContent = formatTime(minutes, seconds);
-    
+    intialize();
 }
 
 function intialize()
 {
     cnt = 0;
     arrowComp = [];
-    arrrowUser = [];
+    arrowUser = [];
     keys = [];
     
+    document.getElementById("arrow_0").style.color = "red";
+    document.getElementById("arrow_1").style.color = "red";
+    document.getElementById("arrow_2").style.color = "red";
+    document.getElementById("arrow_3").style.color = "red";
+
     // * create the arrows for user to follow, has also randomizer inside
     arrowComp = createArrow();
     // * display arrow 
@@ -137,7 +142,7 @@ function intialize()
 async function userInput() {
     return new Promise((resolve) => {
         document.addEventListener('keydown', function onKeyPress(event) {
-            arrrowUser.push(event.key)
+            arrowUser.push(event.key)
             document.removeEventListener('keydown', onKeyPress);
             resolve(); 
         });
@@ -145,8 +150,7 @@ async function userInput() {
 }
 
 
-async function main() {
-    var messageBoard = document.getElementById('messageBoard');
+async function game() {
     var displayPoints = document.getElementById('counter');
     
     // * create the arrows for user to follow, has also randomizer inside
@@ -155,23 +159,16 @@ async function main() {
     // * display arrow 
     displayArrow();
     
-    messageBoard.textContent = 'Press arrow to start game'
     
-    // startTimer()
     while (true) {
-        // * Display Message 
-        
-        // todo: add start and stop for timer
         
         await userInput();
         
-        // todo: define how to end of the game or end by timer or by user
-        
-        
-        if (keys[cnt] === arrrowUser[cnt])
+        if (keys[cnt] === arrowUser[cnt])
             {
             messageBoard.textContent = 'Correct Arrow';
             countPoint++;
+            document.getElementById("arrow_"+String(cnt)).style.color = "blue";
             cnt++;
         }
         else
@@ -181,24 +178,33 @@ async function main() {
             // * initialize arrays,points and count
             countPoint = 0;    
             intialize(); 
-            
-            
+            // restartTimer();
+            // break;
         }
         
         if (cnt === 4) {
             messageBoard.textContent = 'New Arrow';
             intialize();
+            
         }
-        
-        
         displayPoints.textContent = countPoint + " points";
-        
-        
-        
-        
-        
     }
     
 }
 
-main()
+
+async function main() {
+    
+    var messageBoard = document.getElementById('messageBoard');
+    messageBoard.textContent = 'Press Enter to start game'
+    
+    await userInput();
+    if (arrowUser[0] === 'Enter')
+        {
+        startTimer();
+        arrowUser = [];
+    }
+    game();
+}
+
+main();
