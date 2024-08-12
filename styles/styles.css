@@ -37,8 +37,6 @@ h3{
 {
     display:grid;
     grid-template-columns:1fr 1fr 1fr 1fr;
-    /* align-items: center; */
-    /* background-color: #FDDCA9; */
     padding:0px 10px 30px 10px;
     margin: 20px 10% 10% 10%;
     font-size:90px;
@@ -46,7 +44,7 @@ h3{
 
 .fa
 {
-   color: #C21717;
+    color: #C21717;
 }
 
 
