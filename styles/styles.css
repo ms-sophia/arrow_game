@@ -36,10 +36,9 @@ h3{
 .keyArrows
 {
     display:grid;
-    grid-template-columns:1fr 1fr 1fr 1fr;
-    padding:0px 10px 30px 10px;
-    margin: 20px 10% 10% 10%;
-    font-size:90px;
+    grid-template-columns:0fr 0fr 0fr 0fr 0fr 0fr;
+    justify-content: center;
+    font-size:70px;
 }
 
 .fa
