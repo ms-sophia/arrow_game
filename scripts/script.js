@@ -2,8 +2,9 @@ let icons = [];
 let arrowUser = [];
 let keys= [];
 let cnt = 0;
-let minutes = 1;
+let minutes = 0;
 let seconds = 0;
+let microseconds = 0;
 let points = 0;
 let numOfArrows = 6;
 let arrowOriginalColor = "#c21717"
@@ -63,7 +64,7 @@ function displayArrow()
     console.log(`entered displayArrow`);
     for (let i = 0; i < numOfArrows; i++)
         {
-        var icon_i = document.getElementById(`arrow_${String(i)}`);
+        var icon_i = document.getElementById(`arrow_${i}`);
         icon_i.classList.remove('fa-arrow-right', 'fa-arrow-left', 'fa-arrow-up', 'fa-arrow-down');
         icon_i.classList.add('fa-arrow-'+icons[i]);
     }
@@ -75,10 +76,9 @@ function startTimer()
     timer = setInterval(updateTimer, 1000);
 }
 
-function formatTime(minutes, seconds)
+function formatTime(minutes, seconds,microseconds)
 {
-    // console.log(`entered formatTime...`);
-    return (`${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`); 
+    return (`${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}:${String(microseconds).padStart(2, '0')}`); 
     
 }
 
@@ -86,24 +86,9 @@ function updateTimer()
 {
     console.log(`entered updateTimer...`);
     var displayTimer = document.getElementById('timer');
-    displayTimer.textContent = formatTime(minutes, seconds);
+    displayTimer.textContent = formatTime(minutes, seconds,microseconds);
     
-    if (minutes === 0 && seconds === 0)
-        {
-        clearInterval(timer)
-    }
-    else
-    {
-        if (seconds > 0) {
-            seconds--;
-        }
-        else
-        {
-            seconds = 59;
-            minutes--;
-        }
-        
-    }
+    
 }
 
 function restartTimer()
@@ -162,15 +147,16 @@ async function game() {
             document.getElementById(`arrow_${cnt}`).style.color = arrowCorrectColor;
             cnt++;
             if (cnt === 6)
-            {
+                {
                 initialize();
             }
         }
         else
         {
             initialize();
+            break;
         }
-
+        
     }
 }
 
