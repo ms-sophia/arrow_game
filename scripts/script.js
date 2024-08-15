@@ -10,7 +10,7 @@ let numOfArrows = 6;
 let arrowOriginalColor = "#c21717"
 let arrowCorrectColor = "#fea712"
 let IsStop = false;
-
+let counterUserInput = 0;
 function createArrow()
 {
     console.log(`entered createArrow`);
@@ -137,19 +137,30 @@ function initialize()
     icons = [];
     arrowUser = [];
     keys = [];
+    points = 0;
+    document.getElementById('messageBoard').textContent = "Welcome to Key Master";
+    document.getElementById('counter').textContent = `0 points`;
+    
     for (let i = 0; i < numOfArrows; i++){
         document.getElementById( `arrow_${String(i)}`).style.color = arrowOriginalColor;
     }
     createArrow();
     displayArrow();
+    
+    console.log(`cnt:${cnt}`);
+    console.log(`icons:${icons}`);
+    console.log(`arrowUser:${arrowUser}`);
+    console.log(`keys:${keys}`);
 }
 
 async function userInput() {
+    // counterUserInput++;
+    // console.log(`Counter UserInput:${counterUserInput}`);
     console.log(`entered userInput...`);
     return new Promise((resolve) => {
         document.addEventListener('keydown', function onKeyPress(event) {
             arrowUser.push(event.key)
-            // console.log(`Event key:${arrowUser}`);
+            console.log(`Event key:${arrowUser}`);
             document.removeEventListener('keydown', onKeyPress);
             resolve(); 
         });
@@ -163,12 +174,17 @@ async function game() {
     points = 0;
     createArrow();
     displayArrow();
-    console.log(`COUNTING:${cnt}...`);
-    arrowUser.pop();
-    while (true) {
-        
+    // console.log(`COUNTING:${cnt}...`);
+    while (!IsStop) {
         await userInput();
-        console.log(`arrowUser:${arrowUser}`);
+        displayArrow();
+
+        if (arrowUser.includes('Enter')) {
+            console.log(`PASOK AKO`);
+            initialize();
+            return 0;
+        }
+    
         if (arrowUser[cnt] === keys[cnt]) {
             console.log(`CORRECT`);
             displayPoints.textContent = `${++points} points`;
@@ -181,15 +197,9 @@ async function game() {
         }
         else
         {
-            displayPoints.textContent = 'Try again. Please Press Enter';
-            restartTimer();
-            initialize();
-            
+            document.getElementById('messageBoard').textContent = "Press Enter to Try again";
+            console.log(`WRONG`);
         }
-        console.log(`arrowUser:${arrowUser}`);
-        console.log(`Keys:${keys}`);
-        
-        displayArrow();
     }
     
     
@@ -197,22 +207,7 @@ async function game() {
 
 async function main()
 {
-    console.log(`Main is starting...`);
-    
-    while (!IsStop){
-        document.getElementById('messageBoard').textContent = "Press Enter to Start Game"
-        await userInput();
-        if (arrowUser[0] === 'Enter') {
-            // arrowUser.pop();
-            
-            console.log(`userInput:${arrowUser}`);
-            
-            game();
-        }
-        else {
-            IsStop = true;
-        }
-    }
+    con
 }
-
-main();
+game();
+// main();
