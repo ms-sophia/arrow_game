@@ -2,23 +2,25 @@ let icons = [];
 let arrowUser = [];
 let keys= [];
 let cnt = 0;
-let minutes = 0;
-let seconds = 0;
-let microseconds = 0;
+let minutes = 0o0;
+let seconds = 0o0;
+let hours = 0o0;
 let points = 0;
 let numOfArrows = 6;
 let arrowOriginalColor = "#c21717"
 let arrowCorrectColor = "#fea712"
+let IsStop = false;
+
 function createArrow()
 {
     console.log(`entered createArrow`);
-    console.log(`number of Arrow:${numOfArrows}`);
+    // console.log(`number of Arrow:${numOfArrows}`);
     var number = 0;
     var counter = 0;
     while (counter < numOfArrows)
         {
         number = Math.floor(Math.random()*numOfArrows)+1;
-        console.log(number)
+        // console.log(number)
         switch (number) {
             case 1:
             // arrowComp.push('right');
@@ -53,9 +55,10 @@ function createArrow()
             break
             
         }
-        counter++;
         icons.push(direction);
         keys.push(eventKey);
+        counter++;
+        
     }
 }    
 
@@ -65,8 +68,8 @@ function displayArrow()
     for (let i = 0; i < numOfArrows; i++)
         {
         var icon_i = document.getElementById(`arrow_${i}`);
-        icon_i.classList.remove('fa-arrow-right', 'fa-arrow-left', 'fa-arrow-up', 'fa-arrow-down');
-        icon_i.classList.add('fa-arrow-'+icons[i]);
+        icon_i.classList.remove('fa-circle-arrow-right', 'fa-circle-arrow-left', 'fa-circle-arrow-up', 'fa-circle-arrow-down');
+        icon_i.classList.add('fa-circle-arrow-'+icons[i]);
     }
 }
 
@@ -76,20 +79,44 @@ function startTimer()
     timer = setInterval(updateTimer, 1000);
 }
 
-function formatTime(minutes, seconds,microseconds)
-{
-    return (`${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}:${String(microseconds).padStart(2, '0')}`); 
-    
-}
 
 function updateTimer()
 {
-    console.log(`entered updateTimer...`);
+    // console.log(`entered updateTimer...`);
     var displayTimer = document.getElementById('timer');
-    displayTimer.textContent = formatTime(minutes, seconds,microseconds);
+    if (seconds < 60)
+        {
+        seconds++;
+    }
+    if (seconds === 60)
+        {
+        minutes++;
+        seconds = 0;
+    }
+    
+    if (minutes === 60)
+        {
+        hours++;
+        minutes = 0;
+        seconds = 0;
+    }
+    
+    if (hours === 60)
+        {
+        minutes = 0;
+        seconds = 0;
+    }
+    
+    displayTimer.textContent = formatTime(hours,minutes,seconds);
     
     
 }
+function formatTime(hours,minutes,seconds)
+{
+    return (`${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`); 
+    
+}
+
 
 function restartTimer()
 {
@@ -97,10 +124,10 @@ function restartTimer()
     clearInterval(timer);
     
     var displayTimer = document.getElementById('timer');
-    minutes = 1;
+    minutes = 0;
     seconds = 0;
-    displayTimer.textContent = formatTime(minutes, seconds);
-    initialize();
+    hours = 0;
+    displayTimer.textContent = formatTime(hours,minutes,seconds);
 }
 
 function initialize()
@@ -115,7 +142,6 @@ function initialize()
     }
     createArrow();
     displayArrow();
-    
 }
 
 async function userInput() {
@@ -123,6 +149,7 @@ async function userInput() {
     return new Promise((resolve) => {
         document.addEventListener('keydown', function onKeyPress(event) {
             arrowUser.push(event.key)
+            // console.log(`Event key:${arrowUser}`);
             document.removeEventListener('keydown', onKeyPress);
             resolve(); 
         });
@@ -133,14 +160,15 @@ async function game() {
     console.log('Game is starting...');
     var displayPoints = document.getElementById('counter');
     cnt = 0;
+    points = 0;
     createArrow();
     displayArrow();
-    
-    while (true)
-        {
-        displayArrow();
-        console.log(`counting:${cnt}...`);
+    console.log(`COUNTING:${cnt}...`);
+    arrowUser.pop();
+    while (true) {
+        
         await userInput();
+        console.log(`arrowUser:${arrowUser}`);
         if (arrowUser[cnt] === keys[cnt]) {
             console.log(`CORRECT`);
             displayPoints.textContent = `${++points} points`;
@@ -153,11 +181,38 @@ async function game() {
         }
         else
         {
+            displayPoints.textContent = 'Try again. Please Press Enter';
+            restartTimer();
             initialize();
-            break;
+            
         }
+        console.log(`arrowUser:${arrowUser}`);
+        console.log(`Keys:${keys}`);
         
+        displayArrow();
+    }
+    
+    
+}
+
+async function main()
+{
+    console.log(`Main is starting...`);
+    
+    while (!IsStop){
+        document.getElementById('messageBoard').textContent = "Press Enter to Start Game"
+        await userInput();
+        if (arrowUser[0] === 'Enter') {
+            // arrowUser.pop();
+            
+            console.log(`userInput:${arrowUser}`);
+            
+            game();
+        }
+        else {
+            IsStop = true;
+        }
     }
 }
 
-game();
+main();
