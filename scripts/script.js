@@ -5,16 +5,13 @@ let cnt = 0;
 let minutes = 0o0;
 let seconds = 0o0;
 let hours = 0o0;
-let points = 0;
 let numOfArrows = 6;
-let arrowOriginalColor = "#c21717"
+let arrowOriginalColor = "white"
 let arrowCorrectColor = "#fea712"
-let IsStop = false;
-let counterUserInput = 0;
+
 function createArrow()
 {
     console.log(`entered createArrow`);
-    // console.log(`number of Arrow:${numOfArrows}`);
     var number = 0;
     var counter = 0;
     while (counter < numOfArrows)
@@ -23,33 +20,22 @@ function createArrow()
         // console.log(number)
         switch (number) {
             case 1:
-            // arrowComp.push('right');
-            // keys.push('ArrowRight');
-            
             direction = 'right';
             eventKey = 'ArrowRight';
             break;
             case 2:
-            // arrowComp.push('down');
-            // keys.push('ArrowDown');
             direction = 'down'
             eventKey = 'ArrowDown';
             break;
             case 3:
-            // arrowComp.push('left');
-            // keys.push('ArrowLeft');
             direction = 'left'
             eventKey = 'ArrowLeft';
             break;
             case 4:
-            // arrowComp.push('up');
-            // keys.push('ArrowUp');
             direction = 'up'
             eventKey = 'ArrowUp';
             break;
             default:
-            // arrowComp.push('right');
-            // keys.push('ArrowRight');
             direction = 'right'
             eventKey = 'ArrowRight';
             break
@@ -73,16 +59,9 @@ function displayArrow()
     }
 }
 
-function startTimer()
-{
-    console.log(`entered startTimer...`);
-    timer = setInterval(updateTimer, 1000);
-}
-
-
 function updateTimer()
 {
-    // console.log(`entered updateTimer...`);
+    console.log(`entered updateTimer...`);
     var displayTimer = document.getElementById('timer');
     if (seconds < 60)
         {
@@ -117,13 +96,16 @@ function formatTime(hours,minutes,seconds)
     
 }
 
-
+function startTimer()
+{
+    timer = setInterval(updateTimer, 100);
+    
+}
 function restartTimer()
 {
     console.log(`entered restartTimer...`);
-    clearInterval(timer);
-    
     var displayTimer = document.getElementById('timer');
+    clearInterval(timer); 
     minutes = 0;
     seconds = 0;
     hours = 0;
@@ -137,30 +119,21 @@ function initialize()
     icons = [];
     arrowUser = [];
     keys = [];
-    points = 0;
-    document.getElementById('messageBoard').textContent = "Welcome to Key Master";
-    document.getElementById('counter').textContent = `0 points`;
     
+    document.getElementById('messageBoard').textContent = "Welcome to Key Master";
     for (let i = 0; i < numOfArrows; i++){
         document.getElementById( `arrow_${String(i)}`).style.color = arrowOriginalColor;
     }
     createArrow();
     displayArrow();
     
-    console.log(`cnt:${cnt}`);
-    console.log(`icons:${icons}`);
-    console.log(`arrowUser:${arrowUser}`);
-    console.log(`keys:${keys}`);
 }
 
 async function userInput() {
-    // counterUserInput++;
-    // console.log(`Counter UserInput:${counterUserInput}`);
     console.log(`entered userInput...`);
     return new Promise((resolve) => {
         document.addEventListener('keydown', function onKeyPress(event) {
             arrowUser.push(event.key)
-            console.log(`Event key:${arrowUser}`);
             document.removeEventListener('keydown', onKeyPress);
             resolve(); 
         });
@@ -170,21 +143,15 @@ async function userInput() {
 async function game() {
     console.log('Game is starting...');
     var displayPoints = document.getElementById('counter');
-    cnt = 0;
-    points = 0;
-    createArrow();
-    displayArrow();
-    // console.log(`COUNTING:${cnt}...`);
-    while (!IsStop) {
+    var points = 0;
+    displayPoints.textContent=`${points} points`
+    initialize();
+    restartTimer();
+    startTimer();
+    while (true) {
         await userInput();
         displayArrow();
-
-        if (arrowUser.includes('Enter')) {
-            console.log(`PASOK AKO`);
-            initialize();
-            return 0;
-        }
-    
+        
         if (arrowUser[cnt] === keys[cnt]) {
             console.log(`CORRECT`);
             displayPoints.textContent = `${++points} points`;
@@ -197,17 +164,28 @@ async function game() {
         }
         else
         {
-            document.getElementById('messageBoard').textContent = "Press Enter to Try again";
-            console.log(`WRONG`);
+            document.getElementById('messageBoard').textContent = "Click start to try again";
+            clearInterval(timer);
+            break;
         }
     }
     
     
 }
 
-async function main()
+
+function startGame()
 {
-    con
+    console.log(`entered startGame...`);
+    game();
+    return 0;
 }
-game();
-// main();
+function stopGame()
+{
+    console.log(`entered stopGame...`);
+    clearInterval(timer);
+    document.removeEventListener('keydown', onKeyPress);
+    return 0;
+    
+    
+}

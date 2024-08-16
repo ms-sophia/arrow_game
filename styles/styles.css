@@ -1,18 +1,17 @@
 body
 {
-    background-color: #562717;
+    background-color: #590c68;
 }
 .page
 {
     width: 80%;
     height: 100%;
     max-width: 960%;
-    background-color: #e76219;
+    background-color: #df6552;
     margin: 50px auto;
     text-align: center;
     border-radius: 30px;
-    border-color: #fddca9;
-    border:#fddca9 solid 15px;
+    border:#962662 solid 15px;
     
 }
 
@@ -21,7 +20,7 @@ h1,h2,h3
 {
     padding: 20px;
     margin: auto;
-    color:black;
+    color:#f7a93d;
     font-family: "Press Start 2P", system-ui;
 }
 h1{
@@ -41,14 +40,34 @@ h3{
     grid-template-columns:0.1fr 0.1fr 0.1fr 0.1fr 0.1fr 0.1fr;
     justify-content: center;
     font-size:70px;
+    margin: 5px auto;
     padding-bottom: 2%;
 }
 
 .fa
 {
-    color: #c21717;
+    color: white;
 }
 
+.button-group
+{
+    padding-top: 25px;
+    padding-bottom: 25px;
+}
 
+.button-group button
+{
+    background-color:#f7a93d;
+    font: 15px "Press Start 2P";
+    color:#ce4458;
+    cursor:pointer;
+    padding: 10px 30px;
+    margin: 5px;
+}
 
+button:hover{
+  background-color: #fddca9;
+  color:#c21717;
+  transition: background-color 0.3s;
+}
 
