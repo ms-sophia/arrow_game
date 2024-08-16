@@ -169,7 +169,7 @@ async function game() {
             break;
         }
     }
-    
+    return 0;
     
 }
 
@@ -178,14 +178,15 @@ function startGame()
 {
     console.log(`entered startGame...`);
     game();
-    return 0;
 }
+
 function stopGame()
 {
     console.log(`entered stopGame...`);
-    clearInterval(timer);
-    document.removeEventListener('keydown', onKeyPress);
+    var displayPoints = document.getElementById('counter');
+    var points = 0;
+    displayPoints.textContent=`${points} points`
+    initialize();
+    restartTimer();
     return 0;
-    
-    
 }
